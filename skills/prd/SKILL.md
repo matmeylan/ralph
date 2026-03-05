@@ -75,9 +75,10 @@ Each story should be small enough to implement in one focused session.
 - [ ] **[UI stories only]** Verify in browser using dev-browser skill
 ```
 
-**Important:** 
+**Important:**
 - Acceptance criteria must be verifiable, not vague. "Works correctly" is bad. "Button shows confirmation dialog before deleting" is good.
 - **For any story with UI changes:** Always include "Verify in browser using dev-browser skill" as acceptance criteria. This ensures visual verification of frontend work.
+- **For criteria that need human testing** (complex user flows, visual polish, real-device behavior, third-party integrations): Prefix with `[HUMAN]` — e.g., `[HUMAN] Test the payment flow end-to-end with a test card`. Use sparingly, only when automated or browser verification cannot cover it.
 
 ### 4. Functional Requirements
 Numbered list of specific functionalities:

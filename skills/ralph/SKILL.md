@@ -47,7 +47,7 @@ Take a PRD (markdown file or text) and convert it to `prd.json` in your ralph di
 
 **Each story must be completable in ONE Ralph iteration (one context window).**
 
-Ralph spawns a fresh Amp instance per iteration with no memory of previous work. If a story is too big, the LLM runs out of context before finishing and produces broken code.
+Ralph spawns a fresh claude code instance per iteration with no memory of previous work. If a story is too big, the LLM runs out of context before finishing and produces broken code.
 
 ### Right-sized stories:
 - Add a database column and migration
@@ -82,14 +82,38 @@ Stories execute in priority order. Earlier stories must not depend on later ones
 
 ## Acceptance Criteria: Must Be Verifiable
 
-Each criterion must be something Ralph can CHECK, not something vague.
+Each criterion must be verifiable — either by Ralph automatically, by Ralph using browser tools, or by a human tester. Never vague.
 
-### Good criteria (verifiable):
+### Automated criteria (Ralph checks directly):
 - "Add `status` column to tasks table with default 'pending'"
 - "Filter dropdown has options: All, Active, Completed"
-- "Clicking delete shows confirmation dialog"
 - "Typecheck passes"
 - "Tests pass"
+
+### Browser-verified criteria (Ralph checks via dev-browser):
+- "Clicking delete shows confirmation dialog"
+- "Status badge renders with correct colors"
+
+For stories that change UI, include:
+```
+"Verify in browser using dev-browser skill"
+```
+
+### Human-in-the-loop criteria (human tests and reports back):
+
+Some things cannot be verified by Ralph alone — complex user flows, visual polish, real-device behavior, third-party integrations, or anything requiring subjective judgment. For these, use the `[HUMAN]` prefix:
+
+- `"[HUMAN] Test the payment flow end-to-end with a test card"`
+- `"[HUMAN] Verify email is received and renders correctly across mail clients"`
+- `"[HUMAN] Confirm the drag-and-drop feels responsive on mobile"`
+- `"[HUMAN] Verify SSO login works with the company's Okta instance"`
+
+When Ralph encounters a `[HUMAN]` criterion, it should:
+1. Complete all automated and browser-verified criteria first
+2. Pause and ask the human to perform the manual test
+3. Wait for the human's report before marking the story as passing or failing
+
+Use `[HUMAN]` criteria sparingly — only when automated or browser verification genuinely cannot cover it, or feedback is about user experience and taste.
 
 ### Bad criteria (vague):
 - "Works correctly"
@@ -97,7 +121,7 @@ Each criterion must be something Ralph can CHECK, not something vague.
 - "Good UX"
 - "Handles edge cases"
 
-### Always include as final criterion:
+### Always include as final automated criterion:
 ```
 "Typecheck passes"
 ```
@@ -106,13 +130,6 @@ For stories with testable logic, also include:
 ```
 "Tests pass"
 ```
-
-### For stories that change UI, also include:
-```
-"Verify in browser using dev-browser skill"
-```
-
-Frontend stories are NOT complete until visually verified. Ralph will use the dev-browser skill to navigate to the page, interact with the UI, and confirm changes work.
 
 ---
 
@@ -204,7 +221,8 @@ Add ability to mark tasks with different statuses.
         "Changing status saves immediately",
         "UI updates without page refresh",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using dev-browser skill",
+        "[HUMAN] Confirm status toggle feels responsive and intuitive on mobile"
       ],
       "priority": 3,
       "passes": false,
@@ -254,5 +272,6 @@ Before writing prd.json, verify:
 - [ ] Stories are ordered by dependency (schema to backend to UI)
 - [ ] Every story has "Typecheck passes" as criterion
 - [ ] UI stories have "Verify in browser using dev-browser skill" as criterion
+- [ ] `[HUMAN]` criteria used only when automated/browser verification is insufficient
 - [ ] Acceptance criteria are verifiable (not vague)
 - [ ] No story depends on a later story
