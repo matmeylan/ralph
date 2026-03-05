@@ -1,15 +1,17 @@
 #!/bin/bash
 # Ralph - Long-running AI agent loop
-# Usage: ./ralph.sh [max_iterations]
+# Lives in <project-root>/ralph/ and runs claude from the project root
+# Usage: ./ralph/ralph.sh [max_iterations]
 
 set -e
 
 MAX_ITERATIONS=${1:-10}
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PRD_FILE="$SCRIPT_DIR/prd.json"
-PROGRESS_FILE="$SCRIPT_DIR/progress.txt"
-ARCHIVE_DIR="$SCRIPT_DIR/archive"
-LAST_PROJECT_FILE="$SCRIPT_DIR/.last-project"
+RALPH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$RALPH_DIR/.." && pwd)"
+PRD_FILE="$RALPH_DIR/prd.json"
+PROGRESS_FILE="$RALPH_DIR/progress.txt"
+ARCHIVE_DIR="$RALPH_DIR/archive"
+LAST_PROJECT_FILE="$RALPH_DIR/.last-project"
 
 # Archive previous run if project changed
 if [ -f "$PRD_FILE" ] && [ -f "$LAST_PROJECT_FILE" ]; then
@@ -56,7 +58,7 @@ for i in $(seq 1 $MAX_ITERATIONS); do
   echo "  Ralph Iteration $i of $MAX_ITERATIONS"
   echo "==============================================================="
 
-  OUTPUT=$(cd "$SCRIPT_DIR" && claude --dangerously-skip-permissions --print < "$SCRIPT_DIR/prompt.md" 2>&1 | tee /dev/stderr) || true
+  OUTPUT=$(cd "$PROJECT_DIR" && claude --dangerously-skip-permissions --print < "$RALPH_DIR/prompt.md" 2>&1 | tee /dev/stderr) || true
   
   # Check for completion signal
   if echo "$OUTPUT" | grep -q "<promise>COMPLETE</promise>"; then
