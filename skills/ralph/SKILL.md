@@ -96,7 +96,7 @@ Each criterion must be verifiable — either by Ralph automatically, by Ralph us
 
 For stories that change UI, include:
 ```
-"Verify in browser using dev-browser skill"
+"Verify in browser using playwright cli (see playwright skill)"
 ```
 
 ### Human-in-the-loop criteria (human tests and reports back):
@@ -206,7 +206,7 @@ Add ability to mark tasks with different statuses.
         "Each task card shows colored status badge",
         "Badge colors: gray=pending, blue=in_progress, green=done",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using playwright cli (see playwright skill)"
       ],
       "priority": 2,
       "passes": false,
@@ -221,7 +221,7 @@ Add ability to mark tasks with different statuses.
         "Changing status saves immediately",
         "UI updates without page refresh",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill",
+        "Verify in browser using playwright cli (see playwright skill)",
         "[HUMAN] Confirm status toggle feels responsive and intuitive on mobile"
       ],
       "priority": 3,
@@ -236,7 +236,7 @@ Add ability to mark tasks with different statuses.
         "Filter dropdown: All | Pending | In Progress | Done",
         "Filter persists in URL params",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using playwright cli (see playwright skill)"
       ],
       "priority": 4,
       "passes": false,
@@ -271,7 +271,7 @@ Before writing prd.json, verify:
 - [ ] Each story is completable in one iteration (small enough)
 - [ ] Stories are ordered by dependency (schema to backend to UI)
 - [ ] Every story has "Typecheck passes" as criterion
-- [ ] UI stories have "Verify in browser using dev-browser skill" as criterion
+- [ ] UI stories have "Verify in browser using playwright cli (see playwright skill)" as criterion
 - [ ] `[HUMAN]` criteria used only when automated/browser verification is insufficient
 - [ ] Acceptance criteria are verifiable (not vague)
 - [ ] No story depends on a later story
